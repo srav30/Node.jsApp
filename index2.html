@@ -1,0 +1,255 @@
+<html>
+<head>
+<style>
+.cnt{
+padding:10px;
+border:solid 0px #f2f2f2;
+height: 400px; margin: 0 auto;
+}
+</style>
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+   </script>
+
+      <script src = "https://code.highcharts.com/highcharts.js"></script>
+	  
+	  <script type="text/javascript">
+	  $(document).ready(function(){
+	  
+	  $('#email').click(function(){
+	    $('#email_popup').toggle();
+	  });
+	  
+	  //console.log(""+$('#uemail').val()+"/"+$('#dayofWeek").val()+"/"");
+	  
+	  $('#send_mail').click(function(){
+	  console.log("http://localhost:8081/convertandmailpdf/"+$('#uemail').val()+"/"+$('#dayofweek').val()+"/"+$('#hours').val()+"/"+$('#minutes').val());
+	     $.get( "http://localhost:8081/convertandmailpdf/"+$('#uemail').val()+"/"+$('#dayofweek').val()+"/"+$('#hours').val()+"/"+$('#minutes').val(), function( data ) {
+              alert( "Email Sent" );
+			  $('#email_popup').toggle();
+           });
+	  });
+	  }); 
+	    
+	  
+	  </script>
+   </head>
+<body>
+
+<button id="email" style="position:absolute;right:60px;top:15px;z-index:9999999">Email Me</button>  
+
+<div id="email_popup" style="background:#fff;display:none;width:400px;position:absolute;right:150px;padding:10px;border:solid 1px #e7e7e7;z-index:9999999">
+Name:<br>
+<input type="text" id="uname" />
+<hr>
+Email:<br>
+<input type="text" id="uemail"/>
+<hr>
+Date<br>
+Day:    
+<select id="dayofweek" >
+  <option value='0'>Sunday</option>
+  <option value='1'>Monday</option>
+  <option value='2'>Tuesday</option>
+  <option value='3'>Wednesday</option>
+  <option value='4'>Thursday</option>
+  <option value='5'>Friday</option>
+  <option value='6'>Saturday</option>
+
+</select>
+
+Hours: <input type="number" min="0" max="23" id="hours"/> Minutes: <input type="number" id="minutes" min="0" max="59"/>
+
+<hr>
+<button id="send_mail">Send</button>
+</div>
+
+ <div id = "container" class="cnt" style = "width: 90%; "></div>
+ 
+ <div>
+ <div id = "container2" class="cnt" style = "width: 49%; float:left"></div>
+ <div id = "container3" class="cnt" style = "width: 47%; float:left"></div>
+ 
+ </div>
+
+ 
+ <script language = "JavaScript">
+         $(document).ready(function() {
+		 var title = {
+               text: 'Ticket Line chart View'   
+            };
+            var subtitle = {
+               text: 'Verizon'
+            };
+            var xAxis = {
+               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            };
+            var yAxis = {
+               title: {
+                  text: 'Number of Tickets'
+               },
+               plotLines: [{
+                  value: 0,
+                  width: 1,
+                  color: '#CF1E1E'
+               }]
+            };   
+
+            var tooltip = {
+               valueSuffix: 'Tickets'
+            }
+            var legend = {
+               layout: 'vertical',
+               align: 'right',
+               verticalAlign: 'middle',
+               borderWidth: 0
+            };
+            var series =  [{
+                  name: 'Tickets',
+                  data: [100, 200, 95, 120, 230, 230,100,135,400,200,100]
+               }
+               
+            ];
+
+            var json = {};
+            json.title = title;
+            json.subtitle = subtitle;
+            json.xAxis = xAxis;
+            json.yAxis = yAxis;
+            json.tooltip = tooltip;
+            json.legend = legend;
+            json.series = series;
+			
+			
+			
+		 $('#container').highcharts(json);
+		 
+		 
+		 
+		 
+		 Highcharts.chart('container2', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Sort By Device Model - Verizon Tickets'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                }
+            }
+        }
+    },
+    series: [{
+        name: 'Device Models',
+        colorByPoint: true,
+        data: [{
+            name: 'Motorola',
+            y: 12
+        }, {
+            name: 'Iphone',
+            y: 43,
+            sliced: true,
+            selected: true
+        }, {
+            name: 'Samsung',
+            y: 35
+        }, {
+            name: 'Nokia',
+            y: 5
+        }, {
+            name: 'Blackberry',
+            y: 3
+        }, {
+            name: 'All Other Android',
+            y: 2
+        }]
+    }]
+});
+		 
+		 
+		 
+		 
+		 Highcharts.chart('container3', {
+    chart: {
+        type: 'bar'
+    },
+    title: {
+        text: 'Sort by device model - Verizon Tickets'
+    },
+    subtitle: {
+        text: 'Sort by device models'
+    },
+    xAxis: {
+        categories: ['Iphone', 'Motorola', 'Samsung', 'Nokia', 'All other Android'],
+        title: {
+            text: null
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Tickets',
+            align: 'high'
+        },
+        labels: {
+            overflow: 'justify'
+        }
+    },
+    tooltip: {
+        valueSuffix: 'No.s'
+    },
+    plotOptions: {
+        bar: {
+            dataLabels: {
+                enabled: true
+            }
+        }
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'top',
+        x: -40,
+        y: 80,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+        shadow: true
+    },
+    credits: {
+        enabled: false
+    },
+    series: [{
+        name: 'Devices',
+        data: [200, 50, 100, 50, 30]
+    }]
+});
+		 
+		 
+		 
+		 
+         });
+		 
+		 
+		 
+      </script>
+	  
+	  
+
+
+</body>
+</html>
